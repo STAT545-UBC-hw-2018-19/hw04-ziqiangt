@@ -3,7 +3,6 @@ title: "hw04"
 author: "ziqiangt"
 date: "2018/10/7"
 output: github_document
-always_allow_html: yes
 ---
 
 ## Overview
