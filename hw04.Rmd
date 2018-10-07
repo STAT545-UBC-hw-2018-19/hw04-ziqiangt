@@ -151,3 +151,27 @@ Untidy_life %>%
 
 From above figure, it can be seen that the Africa seems has lowest life_exp in all combinations. In the Activity #3, we further learned how to use gather and spread functions.
 
+#### Activity #4
+* In Window functions, we formed a tibble with 24 rows: 2 per year, giving the country with both the lowest and highest life expectancy (in Asia). Take that table (or a similar one for all continents) and reshape it so you have one row per year or per year * continent combination.
+
+```{r}
+Window_life <- gapminder %>%
+  group_by( year, continent) %>% 
+  filter( min_rank( lifeExp) < 2 | min_rank( desc( lifeExp)) < 2) %>%
+  select( year, continent, country, lifeExp) 
+  
+## just see the first 10 rows
+kable( head( Window_life, 10))
+```
+
+Let's reshape the above table to have per year * continent combination.
+
+```{r}
+Reshape_Window_life <- Window_life %>% 
+  spread(key = continent, value = lifeExp)
+
+## just see the first 10 rows
+kable( head( Reshape_Window_life, 10))
+```
+
+
