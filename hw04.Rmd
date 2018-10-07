@@ -40,8 +40,8 @@ untidy_ver <- gapminder %>%
   select( year, country, lifeExp) 
 
 ## View the dadaset
-untidy_ver %>% 
-  kable()
+## just see the first 10 rows
+kable(head( untidy_ver, 10 ))
 ```
 
 It can seen that the data set is untidy now. With the following two functions, we can make data tidy. Here is the cheatsheet:
@@ -59,7 +59,7 @@ Let's first spread the data by country.
 tidy_ver <- gapminder %>% 
   filter( country == "China" | country == "Canada" | country == "Mexico") %>% 
   select( year, country, lifeExp) %>% 
-  spread( key = "country", value = "lifeExp")
+  spread( key = country, value = lifeExp)
 
 ## View the dadaset
 tidy_ver %>% 
@@ -86,5 +86,68 @@ tidy_ver %>%
 
 Conclusion for Activity #2, The function spread and gather are used to spearate and gather the dataset. It can be seen that the trend of fife expectancy for one country against that of another.
 
+#### Activity #3
+* Compute some measure of life expectancy (mean? median? min? max?) for all possible combinations of continent and year. Reshape that to have one row per year and one variable for each continent. Or the other way around: one row per continent and one variable per year.
+    - Use `knitr::kable()` to make this table look pretty in your rendered homework.
+    - Is there a plot that is easier to make with the data in this shape versis the usual form? If so (or you think so), try it! Reflect.
 
+let's first look at the life expectancy for combinations of continent and year
+
+```{r}
+## let's viw the mean, median, min and max
+Untidy_life <- gapminder %>%   
+  group_by( year, continent ) %>% 
+  summarise( mean_life = mean( lifeExp ),
+            median_life = median( lifeExp ),
+            max_life = max( lifeExp ),
+            min_life = min( lifeExp ))
+
+## just see the first 10 rows
+kable(head( Untidy_life, 10 ))
+```
+
+Let's try to do some reshape using gather and spread. 
+
+```{r}
+Reshape_life <- Untidy_life %>% 
+  ## Let's gather the life_exp combinations
+  gather( key = Life_comb,  value = combinations, 3:6 ) %>% 
+  ## spread the continent
+  spread( key = continent,  value = combinations)
+
+## just see the first 10 rows
+kable(head( Reshape_life, 10 ))
+```
+
+We can also make year be each coloum.
+
+```{r}
+Reshape_life_2 <- Untidy_life %>% 
+  ## Let's gather the life_exp combinations
+  gather( key = Life_comb,  value = combinations, 3:6 ) %>% 
+  ## spread the continent
+  spread( key = year,  value = combinations)
+
+## just see the first 10 rows
+kable(head( Reshape_life_2, 10 ))
+```
+
+
+We can use facet_wrap function with all combinations.
+
+```{r}
+Untidy_life %>% 
+  ## Let's gather the life_exp combinations for the future facet_wrap
+  gather( key = Life_comb,  value = combinations, 3:6 ) %>% 
+  ## plot the data with color fill
+  ggplot( aes( x = year, y = combinations, color = continent )) +
+  geom_line(aes(linetype = continent)) +
+  facet_wrap( .~Life_comb )  +
+  ## title
+  ggtitle( "Life expectancy for one country against that of another" ) +
+  xlab( "Year") +
+  ylab( "Life expectancy type" )
+```
+
+From above figure, it can be seen that the Africa seems has lowest life_exp in all combinations. In the Activity #3, we further learned how to use gather and spread functions.
 
