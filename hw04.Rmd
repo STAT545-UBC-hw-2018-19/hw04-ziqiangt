@@ -3,9 +3,89 @@ title: "hw04"
 author: "ziqiangt"
 date: "2018/10/7"
 output: github_document
+always_allow_html: yes
 ---
 
-## R Markdown
+## Overview
+The goal of this homework is to solidify my data wrangling skills by working some realistic problems in the grey area between data aggregation and data reshaping.
 
 
-## Including Plots
+## The Assignment
+This is a “choose your own adventure”-style assignment, where you are expected to do the following two things:
+
+1. Pick one of the data reshaping prompts and do it.
+2. Pick one of the join prompts and do it.
+It is fine to work with a new dataset and/or create variations on these problem themes.
+
+let's first library all dataset:
+```{r}
+library(tibble)
+library(tidyverse)
+library(gapminder)
+library(ggplot2)
+library(knitr)
+```
+
+
+## Data Reshaping Prompts (and relationship to aggregation)
+
+#### Activity #2
+* Make a tibble with one row per year and columns for life expectancy for two or more countries.
+    - Use `knitr::kable()` to make this table look pretty in your rendered homework.
+    - Take advantage of this new data shape to scatterplot life expectancy for one country against that of another.
+
+```{r}
+## Let's extract the life expectancy for these three country from gapminder
+untidy_ver <- gapminder %>% 
+  filter( country == "China" | country == "Canada" | country == "Mexico") %>% 
+  select( year, country, lifeExp) 
+
+## View the dadaset
+untidy_ver %>% 
+  kable()
+```
+
+It can seen that the data set is untidy now. With the following two functions, we can make data tidy. Here is the cheatsheet:
+
+tidyr Function | Definition
+----------------|------------------
+   `spread`     | Spread a key-value pair across multiple columns
+   `gather`     | takes multiple columns and collapses into key values pairs
+
+
+Let's first spread the data by country.
+
+```{r}
+## let's spread the data by country
+tidy_ver <- gapminder %>% 
+  filter( country == "China" | country == "Canada" | country == "Mexico") %>% 
+  select( year, country, lifeExp) %>% 
+  spread( key = "country", value = "lifeExp")
+
+## View the dadaset
+tidy_ver %>% 
+  kable()
+```
+
+It can seen the data has been sperated by the country. Now, let's veiw the scatter plot of the data using gather.
+
+```{r}
+## Actually, we can directly use untidy dataset with group function. However, I insist to gather function here just for learning.
+
+tidy_ver %>% 
+  ## gather the col 2 and 4 data_set
+  gather( key = Country,  value = three_country, 2:4 ) %>%  
+  ## plot the data with color fill
+  ggplot( aes( x = year, y = three_country, color = Country )) +
+  geom_line(linetype = "dashed", size = 0.7) +
+  geom_point(aes(shape = Country), color = "black") +
+  ## title
+  ggtitle( "Life expectancy for one country against that of another" ) +
+  xlab( "Year") +
+  ylab( "Life expectancy" )
+```
+
+Conclusion for Activity #2, The function spread and gather are used to spearate and gather the dataset. It can be seen that the trend of fife expectancy for one country against that of another.
+
+
+
