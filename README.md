@@ -14,7 +14,7 @@ This file helps to navigate the directory for new vistors. You can click **[STAT
 		* [homework02 solution](https://github.com/STAT545-UBC-students/hw02-ziqiangt)
 	+ homework03
 		* [homework03 solution](https://github.com/STAT545-UBC-students/hw03-ziqiangt)
-  + homework04
+ 	+ homework04
 		* [homework04 solution](https://github.com/STAT545-UBC-students/hw04-ziqiangt)
    
  #### It's would be very kind if you could give me some **comments**.
