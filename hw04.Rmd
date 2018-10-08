@@ -44,7 +44,7 @@ untidy_ver <- gapminder %>%
 kable(head( untidy_ver, 10 ))
 ```
 
-It can seen that the data set is untidy now. With the following two functions, we can make data tidy. Here is the cheatsheet:
+###### It can seen that the data set is untidy now. With the following two functions, we can make data tidy. Here is the cheatsheet:
 
 tidyr Function | Definition
 ----------------|------------------
@@ -52,7 +52,7 @@ tidyr Function | Definition
    `gather`     | Gather multiple columns and collapses into key values pairs
 
 
-Let's first spread the data by country.
+###### Let's first spread the data by country.
 
 ```{r}
 ## let's spread the data by country
@@ -66,7 +66,7 @@ tidy_ver %>%
   kable()
 ```
 
-It can seen the data has been sperated by the country. Now, let's veiw the scatter plot of the data using gather.
+###### It can seen the data has been sperated by the country. Now, let's veiw the scatter plot of the data using gather.
 
 ```{r}
 ## Actually, we can directly use untidy dataset with group function. However, I insist to gather function here just for learning.
@@ -84,14 +84,14 @@ tidy_ver %>%
   ylab( "Life expectancy" )
 ```
 
-Conclusion for Activity #2, The function spread and gather are used to spearate and gather the dataset. It can be seen that the trend of fife expectancy for one country against that of another.
+###### Conclusion for Activity #2, The function spread and gather are used to spearate and gather the dataset. It can be seen that the trend of fife expectancy for one country against that of another.
 
 #### Activity #3
 * Compute some measure of life expectancy (mean? median? min? max?) for all possible combinations of continent and year. Reshape that to have one row per year and one variable for each continent. Or the other way around: one row per continent and one variable per year.
     - Use `knitr::kable()` to make this table look pretty in your rendered homework.
     - Is there a plot that is easier to make with the data in this shape versis the usual form? If so (or you think so), try it! Reflect.
 
-let's first look at the life expectancy for combinations of continent and year
+###### let's first look at the life expectancy for combinations of continent and year
 
 ```{r}
 ## let's viw the mean, median, min and max
@@ -106,7 +106,7 @@ Untidy_life <- gapminder %>%
 kable(head( Untidy_life, 10 ))
 ```
 
-Let's try to do some reshape using gather and spread. 
+###### Let's try to do some reshape using gather and spread. 
 
 ```{r}
 Reshape_life <- Untidy_life %>% 
@@ -119,7 +119,7 @@ Reshape_life <- Untidy_life %>%
 kable(head( Reshape_life, 10 ))
 ```
 
-We can also make year be each coloum.
+###### We can also make year be each coloum.
 
 ```{r}
 Reshape_life_2 <- Untidy_life %>% 
@@ -133,7 +133,7 @@ kable(head( Reshape_life_2, 10 ))
 ```
 
 
-We can use facet_wrap function with all combinations.
+###### We can use facet_wrap function with all combinations.
 
 ```{r}
 Untidy_life %>% 
@@ -149,7 +149,7 @@ Untidy_life %>%
   ylab( "Life expectancy type" )
 ```
 
-From above figure, it can be seen that the Africa seems has lowest life_exp in all combinations. In the Activity #3, we further learned how to use gather and spread functions.
+###### From above figure, it can be seen that the Africa seems has lowest life_exp in all combinations. In the Activity #3, we further learned how to use gather and spread functions.
 
 #### Activity #4
 * In Window functions, we formed a tibble with 24 rows: 2 per year, giving the country with both the lowest and highest life expectancy (in Asia). Take that table (or a similar one for all continents) and reshape it so you have one row per year or per year * continent combination.
@@ -164,7 +164,7 @@ Window_life <- gapminder %>%
 kable( head( Window_life, 10))
 ```
 
-Let's reshape the above table to have per year * continent combination.
+###### Let's reshape the above table to have per year * continent combination.
 
 ```{r}
 Reshape_Window_life <- Window_life %>% 
@@ -196,14 +196,14 @@ tidyr Function | Definition
 
 The second data frame you can refer to [2nd dataset](https://www.kaggle.com/folaraz/world-countries-and-continents-details/version/3#_=_). 
 
-Let's first read this dataset:
+###### Let's first read this dataset:
 
 ```{r}
 second_data <- read_csv("Life Expectancy Data.csv")
 kable(head(second_data,10)) #just show 10 lines 
 ```
 
-let's just use partial of the 2nd dataset.
+###### let's just use partial of the 2nd dataset.
 
 ```{r}
 new_2nd <- second_data %>%
@@ -217,7 +217,7 @@ colnames(new_2nd) <- c("year", "country", "schooling", "alcohol")
 kable( head( new_2nd, 10))
 ```
 
-let's just use partial of the gapminder dataset.
+###### let's just use partial of the gapminder dataset.
 
 ```{r}
 new_gap <- gapminder %>%
@@ -229,7 +229,7 @@ kable( head( new_gap, 10))
 ```
 
 
-left join
+###### left join
 ```{r}
 ## left join with year
 Left_2nd <- left_join(new_2nd, new_gap, by = c("year", "country")) 
@@ -238,7 +238,7 @@ Left_2nd <- left_join(new_2nd, new_gap, by = c("year", "country"))
 kable( head( Left_2nd, 10))
 ```
 
-right join
+###### right join
 ```{r}
 ## left join with year
 Right_2nd <- right_join(new_2nd, new_gap, by = c("year", "country")) 
@@ -247,7 +247,7 @@ Right_2nd <- right_join(new_2nd, new_gap, by = c("year", "country"))
 kable( head( Right_2nd, 15))
 ```
 
-full join
+###### full join
 ```{r}
 ## left join with year
 Full_2nd <- full_join(new_2nd, new_gap, by = c("year", "country")) 
@@ -256,7 +256,7 @@ Full_2nd <- full_join(new_2nd, new_gap, by = c("year", "country"))
 kable( head( Full_2nd, 10))
 ```
 
-inner_join
+###### inner_join
 ```{r}
 ## left join with year
 Inner_2nd <- inner_join(new_2nd, new_gap, by = c("year", "country")) 
@@ -266,7 +266,7 @@ kable( head( Inner_2nd, 10))
 ```
 
 #### Activity #3
-merge
+###### merge
 ```{r}
 ## left join with year
 Merge_2nd <- merge(new_2nd, new_gap, by = c("year", "country")) 
@@ -275,7 +275,7 @@ Merge_2nd <- merge(new_2nd, new_gap, by = c("year", "country"))
 kable( head( Merge_2nd, 10))
 ```
 
-match
+###### match
 ```{r}
 ## left join with year
 Match_2nd <- match( c( new_2nd$year, new_2nd$country), 
