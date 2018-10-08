@@ -49,7 +49,7 @@ It can seen that the data set is untidy now. With the following two functions, w
 tidyr Function | Definition
 ----------------|------------------
    `spread`     | Spread a key-value pair across multiple columns
-   `gather`     | takes multiple columns and collapses into key values pairs
+   `gather`     | Gather multiple columns and collapses into key values pairs
 
 
 Let's first spread the data by country.
@@ -168,10 +168,121 @@ Let's reshape the above table to have per year * continent combination.
 
 ```{r}
 Reshape_Window_life <- Window_life %>% 
-  spread(key = continent, value = lifeExp)
+  spread(key = continent, value = lifeExp) %>% 
+  unite("year_country",year,country)
 
 ## just see the first 10 rows
 kable( head( Reshape_Window_life, 10))
 ```
 
 
+## Join Prompts (join, merge, look up)
+
+Conclusion for all functions that will be used in this task
+
+tidyr Function | Definition
+----------------|------------------
+   `left_join`  | return all rows from x, and all columns from x and y. Mismatch returns NA.
+   `right_join` | return all rows from y, and all columns from x and y. Mismatch returns NA.
+   `full_join`  | return all rows and all columns from both x and y. Mismatch returns NA. 
+   `inner_join` | return all rows from x where there are matching values in y. Multiple matches will all be returned
+   `merge`      | Merge two data frames by common columns or row names, not return NA
+   `match`      | match returns a vector of the positions of (first) matches of its first argument in its second.
+
+#### Activity #1
+* Create a second data frame, complementary to Gapminder. Join this with (part of) Gapminder using a dplyr join function and make some observations about the process and result. Explore the different types of joins. Examples of a second data frame you could build:
+    - One row per country, a country variable and one or more variables with extra info, such as language spoken, NATO membership, national animal, or capitol city.
+    - One row per continent, a continent variable and one or more variables with extra info, such as northern versus southern hemisphere.
+
+The second data frame you can refer to [2nd dataset](https://www.kaggle.com/folaraz/world-countries-and-continents-details/version/3#_=_). 
+
+Let's first read this dataset:
+
+```{r}
+second_data <- read_csv("Life Expectancy Data.csv")
+kable(head(second_data,10)) #just show 10 lines 
+```
+
+let's just use partial of the 2nd dataset.
+
+```{r}
+new_2nd <- second_data %>%
+  ## let's use the second_data that has the same year and country with the gapminder
+  select( Year, Country, Schooling, Alcohol)
+
+## rename the colums to keep the case-sensitve words
+colnames(new_2nd) <- c("year", "country", "schooling", "alcohol")
+ 
+## just see the first 10 rows
+kable( head( new_2nd, 10))
+```
+
+let's just use partial of the gapminder dataset.
+
+```{r}
+new_gap <- gapminder %>%
+  ## just use year, country, lifeExp of gapminder
+  select( year, country, lifeExp)
+
+## just see the first 10 rows
+kable( head( new_gap, 10))
+```
+
+
+left join
+```{r}
+## left join with year
+Left_2nd <- left_join(new_2nd, new_gap, by = c("year", "country")) 
+
+## just see the first 10 rows
+kable( head( Left_2nd, 10))
+```
+
+right join
+```{r}
+## left join with year
+Right_2nd <- right_join(new_2nd, new_gap, by = c("year", "country")) 
+
+## just see the first 10 rows
+kable( head( Right_2nd, 15))
+```
+
+full join
+```{r}
+## left join with year
+Full_2nd <- full_join(new_2nd, new_gap, by = c("year", "country")) 
+
+## just see the first 10 rows
+kable( head( Full_2nd, 10))
+```
+
+inner_join
+```{r}
+## left join with year
+Inner_2nd <- inner_join(new_2nd, new_gap, by = c("year", "country")) 
+
+## just see the first 10 rows
+kable( head( Inner_2nd, 10))
+```
+
+#### Activity #3
+merge
+```{r}
+## left join with year
+Merge_2nd <- merge(new_2nd, new_gap, by = c("year", "country")) 
+
+## just see the first 10 rows
+kable( head( Merge_2nd, 10))
+```
+
+match
+```{r}
+## left join with year
+Match_2nd <- match( c( new_2nd$year, new_2nd$country), 
+                    c( new_gap$year, new_gap$country)) 
+
+## just see the first 10 rows
+kable( head( Match_2nd, 10))
+```
+
+The conclusion of this task has been included at the begining of this task. Please take a look.
